@@ -1,0 +1,36 @@
+{{- if default "" .Values.dynmap.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "minecraft.fullname" . }}-dynmap"
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+{{- if (or (eq .Values.dynmap.serviceType "ClusterIP") (empty .Values.dynmap.serviceType)) }}
+  type: ClusterIP
+{{- else if eq .Values.dynmap.serviceType "LoadBalancer" }}
+  type: {{ .Values.dynmap.serviceType }}
+  {{- if .Values.dynmap.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.dynmap.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.dynmap.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .Values.dynmap.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .Values.dynmap.serviceType }}
+{{- end }}
+  {{- if .Values.dynmap.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.dynmap.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+  - name: dynmap
+    port: {{ .Values.dynmap.port }}
+    targetPort: dynmap
+    protocol: TCP
+  selector:
+    app: {{ template "minecraft.fullname" . }}
+{{- end }}

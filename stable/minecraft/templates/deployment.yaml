@@ -199,6 +199,11 @@ spec:
           containerPort: {{ .Values.prometheus.port }}
           protocol: TCP
         {{- end }}
+        {{- if .Values.dynmap.enabled }}
+        - name: dynmap
+          containerPort: {{ .Values.dynmap.port }}
+          protocol: TCP
+        {{- end }}
         volumeMounts:
         - name: datadir
           mountPath: /data
