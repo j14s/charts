@@ -7,7 +7,8 @@ metadata:
     release: prometheus
 spec:
   selector:
-    app: {{ template "minecraft.fullname" . }}
+    labels:
+      app: {{ template "minecraft.fullname" . }}
   endpoints:
   - port: metrics
 {{- end }}
