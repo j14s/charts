@@ -176,6 +176,10 @@ persistence:
     # existingClaim: nil
     Size: 1Gi
 
+prometheus:
+  enabled: false
+  port: 9225
+
 podAnnotations: {}
 
 deploymentAnnotations: {}
