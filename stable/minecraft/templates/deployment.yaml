@@ -194,6 +194,11 @@ spec:
           containerPort: {{ .Values.minecraftServer.rcon.port }}
           protocol: TCP
         {{- end }}
+        {{- if .Values.geyser.enabled }}
+        - name: geyser
+          containerPort: {{ .Values.geyser.port }}
+          protocol: UDP
+        {{- end }}
         {{- if .Values.prometheus.enabled }}
         - name: metrics
           containerPort: {{ .Values.prometheus.port }}

@@ -176,9 +176,29 @@ persistence:
     # existingClaim: nil
     Size: 1Gi
 
+geyser:
+  # If you enable this, make SURE to change your password below.
+  enabled: false
+  port: 19132
+  serviceType: LoadBalancer
+  loadBalancerIP:
+  # loadBalancerSourceRanges: []
+  ## Set the externalTrafficPolicy in the Service to either Cluster or Local
+  # externalTrafficPolicy: Cluster
+
+
 prometheus:
   enabled: false
   port: 9225
+
+dynmap:
+  enabled: false
+  port: 8123
+  serviceType: LoadBalancer
+  loadBalancerIP:
+  # loadBalancerSourceRanges: []
+  ## Set the externalTrafficPolicy in the Service to either Cluster or Local
+  # externalTrafficPolicy: Cluster
 
 podAnnotations: {}
 

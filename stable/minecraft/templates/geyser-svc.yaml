@@ -1,0 +1,36 @@
+{{- if default "" .Values.geyser.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "minecraft.fullname" . }}-geyser"
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+{{- if (or (eq .Values.geyser.serviceType "ClusterIP") (empty .Values.geyser.serviceType)) }}
+  type: ClusterIP
+{{- else if eq .Values.geyser.serviceType "LoadBalancer" }}
+  type: {{ .Values.geyser.serviceType }}
+  {{- if .Values.geyser.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.geyser.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.geyser.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+{{ toYaml .Values.geyser.loadBalancerSourceRanges | indent 4 }}
+  {{- end -}}
+{{- else }}
+  type: {{ .Values.geyser.serviceType }}
+{{- end }}
+  {{- if .Values.geyser.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.geyser.externalTrafficPolicy }}
+  {{- end }}
+  ports:
+  - name: geyser
+    port: {{ .Values.geyser.port }}
+    targetPort: geyser
+    protocol: UDP
+  selector:
+    app: {{ template "minecraft.fullname" . }}
+{{- end }}
