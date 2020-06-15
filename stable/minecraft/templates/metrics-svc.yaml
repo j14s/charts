@@ -1,0 +1,20 @@
+{{- if default "" .Values.prometheus.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ template "minecraft.fullname" . }}-metrics"
+  labels:
+    app: {{ template "minecraft.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: ClusterIP
+  ports:
+  - name: metrics
+    port: {{ .Values.prometheus.port }}
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: {{ template "minecraft.fullname" . }}
+{{- end }}

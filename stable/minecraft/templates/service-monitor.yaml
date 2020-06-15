@@ -1,0 +1,14 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "minecraft.fullname" . }}
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app-rel: {{ template "minecraft.fullname" . }}
+  endpoints:
+  - port: metrics
+{{- end }}
